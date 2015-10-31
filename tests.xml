@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="tests" basedir="." default="main">
+	<property file="build.properties"/>
+	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
+	<taskdef name="flexunit" classname="org.flexunit.ant.tasks.FlexUnitTask">
+		<classpath>
+			<fileset dir="${lib.flexunit}">
+				<include name="flexUnitTasks*.jar"/>
+			</fileset>
+		</classpath>
+	</taskdef>
+	<target name="main" depends="execute">
+		<exec executable="${tool.browser}">
+			<arg value="${test.report}/index.html"/>
+		</exec>
+	</target>
+	<target name="execute">
+		<delete dir="${test.report}" includeEmptyDirs="true" failonerror="false"/>
+		<mkdir dir="${test.report}"/>
+		<flexunit debug="true" workingDir="${test}" toDir="${test.report}" haltonfailure="false" verbose="true" localTrusted="true">
+			<testSource dir="${test.src}">
+				<include name="**/*Test.as" />
+			</testSource>
+			<library dir="${lib.flexunit}">
+				<include name="**/flexunit-*.swc"/>
+			</library>
+		</flexunit>
+		<junitreport todir="${test.report}">
+			<fileset dir="${test.report}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${test.report}" />
+		</junitreport>
+	</target>
+</project>
