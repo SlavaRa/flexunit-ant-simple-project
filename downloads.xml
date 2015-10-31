@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="downloads" default="main">
+	<property file="build.properties"/>
+	<target name="main" depends="-init, download flexunit"/>
+	<target name="clean">
+		<delete dir="${tmp}" includeEmptyDirs="true" failonerror="false"/>
+		<delete dir="${lib.flexunit}" includeEmptyDirs="true" failonerror="false"/>
+	</target>
+	<target name="download flexunit" depends="-check flexunit libs" unless="flexunit.libs.exists">
+		<mkdir dir="${tmp}"/>
+		<get src="${url.flexunit}" dest="${tmp}/flexunit.zip"/>
+		<unzip src="${tmp}/flexunit.zip" dest="${tmp}"/>
+		<copy todir="${lib.flexunit}" verbose="true">
+			<fileset dir="${tmp}/flexunit/"/>
+		</copy>
+		<delete dir="${tmp}" includeEmptyDirs="true" failonerror="false"/>
+	</target>
+	<target name="-init">
+		<mkdir dir="${lib.flexunit}"/>
+	</target>
+	<target name="-check flexunit libs" description="Checks if flexunit libs and jars exists.">
+		<fileset dir="${lib.flexunit}" id="fileset"/>
+		<pathconvert refid="fileset" property="flexunit.libs.exists" setonempty="false"/>
+	</target>
+</project>
