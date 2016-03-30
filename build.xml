@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="build" basedir="." default="main">
 	<property file="build.properties"/>
-	<target name="main" depends="-init">
-	</target>
+	<target name="main" depends="-init"/>
 	<target name="test" depends="-init">
 		<ant antfile="${basedir}/downloads.xml"/>
 		<ant antfile="${basedir}/tests.xml"/>
